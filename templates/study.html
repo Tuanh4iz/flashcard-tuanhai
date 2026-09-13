@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html lang="vi" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📖 Học từ vựng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg-primary: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --nav-bg: rgba(255,255,255,0.85);
+            --border-color: rgba(0,0,0,0.06);
+        }
+        [data-bs-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-card: #1e1e3a;
+            --text-primary: #f1f1f1;
+            --text-secondary: #8a8aa8;
+            --shadow: 0 8px 30px rgba(0,0,0,0.4);
+            --nav-bg: rgba(20,20,40,0.9);
+            --border-color: rgba(255,255,255,0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+        .study-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1.2rem 1.2rem 0;
+        }
+        .study-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .study-header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .study-header .theme-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        /* Swipe Card */
+        .swipe-container {
+            position: relative;
+            height: 340px;
+            perspective: 800px;
+        }
+        .swipe-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-card);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+            cursor: grab;
+            touch-action: none;
+            border: 1px solid var(--border-color);
+            backface-visibility: hidden;
+            user-select: none;
+        }
+        .swipe-card:active { cursor: grabbing; }
+        .swipe-card .word-display {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        .swipe-card .example-display {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        .swipe-card .level-badge {
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #6c63ff;
+            color: white;
+            display: inline-block;
+        }
+        .swipe-card .level-badge.easy { background: #28a745; }
+        .swipe-card .level-badge.medium { background: #ffc107; color: #212529; }
+        .swipe-card .level-badge.hard { background: #dc3545; }
+        .swipe-card .meaning-hidden {
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .swipe-card .meaning-hidden.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .swipe-card .meaning-hidden .meaning-text {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #28a745;
+        }
+        .swipe-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .swipe-indicator .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .swipe-indicator .dot.active {
+            background: #6c63ff;
+            transform: scale(1.3);
+        }
+        /* Swipe hint */
+        .swipe-hint {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin: 1rem 0;
+            opacity: 0.6;
+        }
+        .swipe-hint i { font-size: 1.2rem; }
+
+        /* Progress */
+        .progress-wrapper {
+            margin: 1.5rem 0;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+        }
+        .progress-wrapper .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+        }
+        .progress-wrapper .progress-bar-custom {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-wrapper .progress-bar-custom .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6c63ff, #a78bfa);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.6rem 0 0.8rem;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border-color);
+            z-index: 200;
+            transition: background 0.3s, border 0.3s;
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.65rem;
+            transition: color 0.2s;
+            padding: 0.2rem 0.8rem;
+        }
+        .bottom-nav a i { font-size: 1.5rem; }
+        .bottom-nav a.active { color: #6c63ff; }
+        .bottom-nav a .badge-nav {
+            background: #dc3545;
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 20px;
+            min-width: 18px;
+            text-align: center;
+        }
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+        .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 1rem; }
+
+        @media (max-width: 480px) {
+            .swipe-card .word-display { font-size: 2rem; }
+            .swipe-card .meaning-hidden .meaning-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="study-container">
+    <div class="study-header">
+        <h1><i class="bi bi-book" style="color: #6c63ff;"></i> Học từ</h1>
+        <button class="theme-btn" id="themeToggleStudy"><i class="bi bi-circle-half"></i></button>
+    </div>
+
+    {% if message %}
+        <div class="alert alert-info">{{ message }}</div>
+    {% endif %}
+
+    {% if word %}
+        <div class="swipe-hint">
+            <i class="bi bi-hand-index-thumb"></i> Kéo thẻ sang trái/phải để chuyển từ
+        </div>
+
+        <div class="swipe-container" id="swipeContainer">
+            <div class="swipe-card" id="swipeCard">
+                <div class="word-display">{{ word[1] }}</div>
+                {% if word[3] %}
+                    <div class="example-display">"{{ word[3] }}"</div>
+                {% endif %}
+                <span class="level-badge {{ word[4] or 'medium' }}">{{ word[4] or 'medium' }}</span>
+                <div class="meaning-hidden" id="meaningHidden">
+                    <div class="meaning-text">{{ word[2] }}</div>
+                    <button class="btn btn-sm btn-outline-secondary mt-2" onclick="toggleMeaning()">Ẩn nghĩa</button>
+                </div>
+                <button class="btn btn-success btn-sm mt-3" onclick="toggleMeaning()">
+                    <i class="bi bi-eye"></i> Xem nghĩa
+                </button>
+            </div>
+        </div>
+
+        <div class="swipe-indicator" id="dotIndicator">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-label">
+                <span>Tiến độ</span>
+                <span>{{ learned_count }}/{{ total_words }}</span>
+            </div>
+            <div class="progress-bar-custom">
+                <div class="fill" style="width: {{ (learned_count / total_words * 100) if total_words > 0 else 0 }}%;"></div>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+            <a href="/study" class="btn btn-primary" style="border-radius: 30px; padding: 0.6rem 1.8rem;">
+                <i class="bi bi-arrow-right"></i> Từ tiếp theo
+            </a>
+            <a href="/reset-study" class="btn btn-outline-danger" style="border-radius: 30px; padding: 0.6rem 1.2rem;"
+               onclick="return confirm('Reset tiến độ học?')">
+                <i class="bi bi-arrow-counterclockwise"></i> Học lại
+            </a>
+        </div>
+
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-emoji-frown"></i>
+            <h4>Chưa có từ nào!</h4>
+            <p>Hãy thêm từ mới để bắt đầu học.</p>
+            <a href="/" class="btn btn-success">➕ Thêm từ</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+    <a href="/"><i class="bi bi-house"></i><span>Trang chủ</span></a>
+    <a href="/study" class="active"><i class="bi bi-book"></i><span>Học</span></a>
+    <a href="/calculator"><i class="bi bi-calculator"></i><span>Máy tính</span></a>
+</nav>
+
+<script>
+    // ===== DARK MODE =====
+    (function() {
+        const html = document.documentElement;
+        const toggle = document.getElementById('themeToggleStudy');
+        const saved = localStorage.getItem('theme') || 'light';
+        if (saved === 'dark') html.setAttribute('data-bs-theme', 'dark');
+        toggle.addEventListener('click', function() {
+            const next = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', next);
+            localStorage.setItem('theme', next);
+        });
+    })();
+
+    // ===== TOGGLE MEANING =====
+    function toggleMeaning() {
+        const hidden = document.getElementById('meaningHidden');
+        hidden.classList.toggle('show');
+    }
+
+    // ===== SWIPE GESTURE =====
+    (function() {
+        if (document.getElementById('swipeCard')) {
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            const card = document.getElementById('swipeCard');
+            const container = document.getElementById('swipeContainer');
+
+            function onStart(clientX) {
+                startX = clientX;
+                isDragging = true;
+                card.style.transition = 'none';
+            }
+
+            function onMove(clientX) {
+                if (!isDragging) return;
+                currentX = clientX - startX;
+                const rotate = currentX / 15;
+                const opacity = 1 - Math.abs(currentX) / 400;
+                card.style.transform = `translateX(${currentX}px) rotate(${rotate}deg) scale(${Math.max(0.8, opacity)})`;
+                card.style.opacity = Math.max(0.3, opacity);
+            }
+
+            function onEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease';
+
+                if (Math.abs(currentX) > 150) {
+                    // Swipe thành công → chuyển sang từ tiếp theo
+                    card.style.transform = `translateX(${currentX > 0 ? 400 : -400}px) rotate(${currentX / 15}deg)`;
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = '/study';
+                    }, 300);
+                } else {
+                    card.style.transform = 'translateX(0) rotate(0) scale(1)';
+                    card.style.opacity = '1';
+                }
+                currentX = 0;
+            }
+
+            // Touch events
+            card.addEventListener('touchstart', (e) => {
+                onStart(e.touches[0].clientX);
+            }, { passive: true });
+            card.addEventListener('touchmove', (e) => {
+                onMove(e.touches[0].clientX);
+            }, { passive: true });
+            card.addEventListener('touchend', onEnd, { passive: true });
+
+            // Mouse events (for desktop)
+            card.addEventListener('mousedown', (e) => {
+                onStart(e.clientX);
+                e.preventDefault();
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                onMove(e.clientX);
+            });
+            document.addEventListener('mouseup', onEnd);
+        }
+    })();
+</script>
+</body>
+</html>

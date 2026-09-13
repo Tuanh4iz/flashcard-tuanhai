@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 Máy tính CASIO fx-580VN Plus</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --calc-bg: #f0f2f5;
+            --display-bg: #e8edf0;
+            --btn-bg: #ffffff;
+            --btn-hover: #e6e9ed;
+            --btn-text: #1a1a2e;
+            --shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        [data-bs-theme="dark"] {
+            --calc-bg: #1a1a2e;
+            --display-bg: #2a2a44;
+            --btn-bg: #2d2d44;
+            --btn-hover: #3d3d5e;
+            --btn-text: #f1f1f1;
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        body {
+            background: var(--calc-bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            transition: background 0.3s;
+        }
+        .calculator {
+            max-width: 400px;
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--btn-bg);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .calc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0 0.2rem;
+        }
+        .calc-header .brand {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--btn-text);
+            opacity: 0.7;
+        }
+        .calc-header .brand i { color: #6c63ff; }
+        .display {
+            background: var(--display-bg);
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+            transition: background 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+        .display .expression {
+            font-size: 1rem;
+            color: #6c757d;
+            word-break: break-all;
+            text-align: right;
+            width: 100%;
+            min-height: 1.5rem;
+        }
+        .display .result {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--btn-text);
+            transition: color 0.3s;
+            word-break: break-all;
+            text-align: right;
+            width: 100%;
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+        .btn-grid .btn-calc {
+            padding: 0.6rem 0;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            transition: all 0.15s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .btn-grid .btn-calc:hover {
+            background: var(--btn-hover);
+            transform: scale(0.96);
+        }
+        .btn-grid .btn-calc:active { transform: scale(0.92); }
+        .btn-calc.fn { color: #0d6efd; }
+        .btn-calc.op { color: #dc3545; }
+        .btn-calc.eq { background: #0d6efd; color: white; }
+        .btn-calc.eq:hover { background: #0b5ed7; }
+        .btn-calc.span2 { grid-column: span 2; }
+        .btn-calc.span3 { grid-column: span 3; }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.2rem;
+            color: var(--btn-text);
+            opacity: 0.6;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { opacity: 1; }
+        .theme-toggle-mini {
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 0.5rem;
+            color: var(--btn-text);
+        }
+    </style>
+</head>
+<body>
+<div class="calculator" id="calcApp">
+    <div class="calc-header">
+        <span class="brand"><i class="bi bi-calculator"></i> CASIO fx-580VN</span>
+        <span class="theme-toggle-mini" id="themeToggleMini" title="Đổi chủ đề">
+            <i class="bi bi-circle-half"></i>
+        </span>
+    </div>
+
+    <div class="display">
+        <div class="expression" id="expression"></div>
+        <div class="result" id="result">0</div>
+    </div>
+
+    <div class="btn-grid">
+        <button class="btn-calc fn" data-action="shift">Shift</button>
+        <button class="btn-calc fn" data-action="alpha">Alpha</button>
+        <button class="btn-calc fn" data-action="mode">Mode</button>
+        <button class="btn-calc fn" data-action="on">ON</button>
+        <button class="btn-calc fn" data-action="clear">AC</button>
+
+        <button class="btn-calc fn" data-action="sin">sin</button>
+        <button class="btn-calc fn" data-action="cos">cos</button>
+        <button class="btn-calc fn" data-action="tan">tan</button>
+        <button class="btn-calc fn" data-action="log">log</button>
+        <button class="btn-calc fn" data-action="ln">ln</button>
+
+        <button class="btn-calc fn" data-action="sqrt">√</button>
+        <button class="btn-calc fn" data-action="square">x²</button>
+        <button class="btn-calc fn" data-action="power">x^y</button>
+        <button class="btn-calc op" data-action="lparen">(</button>
+        <button class="btn-calc op" data-action="rparen">)</button>
+
+        <button class="btn-calc" data-action="7">7</button>
+        <button class="btn-calc" data-action="8">8</button>
+        <button class="btn-calc" data-action="9">9</button>
+        <button class="btn-calc op" data-action="divide">÷</button>
+        <button class="btn-calc" data-action="del">⌫</button>
+
+        <button class="btn-calc" data-action="4">4</button>
+        <button class="btn-calc" data-action="5">5</button>
+        <button class="btn-calc" data-action="6">6</button>
+        <button class="btn-calc op" data-action="multiply">×</button>
+        <button class="btn-calc op" data-action="minus">−</button>
+
+        <button class="btn-calc" data-action="1">1</button>
+        <button class="btn-calc" data-action="2">2</button>
+        <button class="btn-calc" data-action="3">3</button>
+        <button class="btn-calc op" data-action="plus">+</button>
+        <button class="btn-calc eq" data-action="equals">=</button>
+
+        <button class="btn-calc span2" data-action="0">0</button>
+        <button class="btn-calc" data-action="dot">.</button>
+        <button class="btn-calc op" data-action="percent">%</button>
+        <button class="btn-calc" data-action="ans">Ans</button>
+    </div>
+
+    <div class="text-center mt-2">
+        <a href="/" class="back-link"><i class="bi bi-arrow-left"></i> Quay lại từ vựng</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Dark mode
+        const html = document.documentElement;
+        const toggle = document.getElementById('themeToggleMini');
+        const saved = localStorage.getItem('theme') || 'light';
+        if (saved === 'dark') html.setAttribute('data-bs-theme', 'dark');
+        toggle.addEventListener('click', function() {
+            const next = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-bs-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
+        // Calculator logic
+        const displayExpr = document.getElementById('expression');
+        const displayResult = document.getElementById('result');
+        let currentExpression = '';
+        let currentResult = '0';
+        let isNewEntry = false;
+
+        function updateDisplay() {
+            displayExpr.textContent = currentExpression || '';
+            displayResult.textContent = currentResult;
+        }
+
+        function evaluate(expr) {
+            try {
+                let sanitized = expr
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/−/g, '-')
+                    .replace(/sin/g, 'Math.sin')
+                    .replace(/cos/g, 'Math.cos')
+                    .replace(/tan/g, 'Math.tan')
+                    .replace(/log/g, 'Math.log10')
+                    .replace(/ln/g, 'Math.log')
+                    .replace(/√/g, 'Math.sqrt')
+                    .replace(/π/g, 'Math.PI')
+                    .replace(/e/g, 'Math.E')
+                    .replace(/x²/g, '**2')
+                    .replace(/x\^y/g, '**');
+                sanitized = sanitized.replace(/(\d+)%/g, (_, num) => `(${num}/100)`);
+                const ans = currentResult;
+                sanitized = sanitized.replace(/Ans/g, ans);
+                if (/[a-zA-Z]/.test(sanitized.replace(/Math\.\w+/g, ''))) return 'Lỗi';
+                const result = Function(`"use strict"; return (${sanitized})`)();
+                if (typeof result === 'number' && isFinite(result)) {
+                    return parseFloat(result.toFixed(10)).toString();
+                }
+                return 'Lỗi';
+            } catch (e) {
+                return 'Lỗi';
+            }
+        }
+
+        function handleAction(action) {
+            if (action === 'equals') {
+                if (!currentExpression) return;
+                const result = evaluate(currentExpression);
+                currentResult = result;
+                currentExpression = currentExpression + ' =';
+                isNewEntry = true;
+                updateDisplay();
+                return;
+            }
+            if (action === 'clear' || action === 'on') {
+                currentExpression = '';
+                currentResult = '0';
+                isNewEntry = false;
+                updateDisplay();
+                return;
+            }
+            if (action === 'del') {
+                currentExpression = currentExpression.slice(0, -1);
+                updateDisplay();
+                return;
+            }
+            if (isNewEntry && /[0-9.]/.test(action)) {
+                currentExpression = '';
+                isNewEntry = false;
+            }
+            const specials = {
+                'sin': 'sin(', 'cos': 'cos(', 'tan': 'tan(',
+                'log': 'log(', 'ln': 'ln(', 'sqrt': '√(',
+                'square': '²', 'power': '^', 'percent': '%',
+                'ans': 'Ans', 'lparen': '(', 'rparen': ')',
+                'divide': '÷', 'multiply': '×', 'minus': '−', 'plus': '+', 'dot': '.'
+            };
+            if (action in specials) {
+                currentExpression += specials[action];
+                isNewEntry = false;
+                updateDisplay();
+                return;
+            }
+            if (/^[0-9]$/.test(action)) {
+                currentExpression += action;
+                isNewEntry = false;
+                updateDisplay();
+            }
+        }
+
+        document.querySelectorAll('.btn-calc').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const action = this.dataset.action;
+                if (action) handleAction(action);
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if (key >= '0' && key <= '9') handleAction(key);
+            else if (key === '.') handleAction('dot');
+            else if (key === '+') handleAction('plus');
+            else if (key === '-') handleAction('minus');
+            else if (key === '*') handleAction('multiply');
+            else if (key === '/') handleAction('divide');
+            else if (key === 'Enter' || key === '=') { e.preventDefault(); handleAction('equals'); }
+            else if (key === 'Backspace') { e.preventDefault(); handleAction('del'); }
+            else if (key === 'Escape') handleAction('clear');
+            else if (key === '(') handleAction('lparen');
+            else if (key === ')') handleAction('rparen');
+        });
+
+        updateDisplay();
+    })();
+</script>
+</body>
+</html>

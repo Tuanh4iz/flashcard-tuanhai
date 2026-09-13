@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thêm từ mới</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>➕ Thêm từ vựng mới</h1>
+    <form method="POST">
+        <label>Từ vựng:</label><br>
+        <input type="text" name="word" required><br><br>
+        <label>Nghĩa:</label><br>
+        <input type="text" name="meaning" required><br><br>
+        <label>Ví dụ:</label><br>
+        <textarea name="example" rows="3" cols="30"></textarea><br><br>
+        <button type="submit">💾 Lưu</button>
+        <a href="/">🔙 Quay lại</a>
+    </form>
+</body>
+</html>

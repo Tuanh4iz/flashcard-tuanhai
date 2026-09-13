@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="vi" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>📚 Từ điển cá nhân - Phan Hải</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+        :root {
+            --brand-color: #6c63ff;
+            --brand-gradient: linear-gradient(135deg, #6c63ff, #a78bfa);
+            --bg-primary: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 20px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --nav-bg: rgba(255,255,255,0.85);
+            --border-color: rgba(0,0,0,0.06);
+        }
+        [data-bs-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-card: #1e1e3a;
+            --text-primary: #f1f1f1;
+            --text-secondary: #8a8aa8;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.5);
+            --nav-bg: rgba(20,20,40,0.9);
+            --border-color: rgba(255,255,255,0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--text-primary);
+            transition: background var(--transition), color var(--transition);
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+        /* ===== HEADER CÓ NHẬN DIỆN THƯƠNG HIỆU ===== */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1.2rem;
+            background: var(--bg-card);
+            border-bottom: 3px solid var(--brand-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background var(--transition), border var(--transition);
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        .brand-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--brand-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(108,99,255,0.3);
+        }
+        .brand-logo .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .brand-logo .brand-text .main {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .brand-logo .brand-text .sub {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+        .brand-logo .brand-text .sub span {
+            color: var(--brand-color);
+            font-weight: 600;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-actions .tiktok-link {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .header-actions .tiktok-link:hover { color: #fe2c55; }
+        .theme-toggle-mobile {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.3rem 0.5rem;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .theme-toggle-mobile:hover { background: var(--border-color); }
+
+        /* ===== SEARCH ===== */
+        .search-bar {
+            padding: 0.8rem 1.2rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+            transition: background var(--transition), border var(--transition);
+            flex-wrap: wrap;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border 0.2s;
+            outline: none;
+            min-width: 120px;
+        }
+        .search-bar input:focus { border-color: var(--brand-color); }
+        .search-bar select {
+            padding: 0.7rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        /* ===== WORD LIST ===== */
+        .word-list {
+            padding: 0.8rem 1.2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .word-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1rem 1.2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: grab;
+            transition: transform 0.2s, box-shadow 0.3s;
+            animation: cardAppear 0.3s ease;
+        }
+        .word-card:active { cursor: grabbing; }
+        .word-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+        .word-card .word-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            flex: 1;
+        }
+        .word-card .word-info .word {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .word-card .word-info .meaning {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .word-card .word-info .example {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            font-style: italic;
+        }
+        .word-card .badge-level {
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: var(--brand-color);
+            color: white;
+        }
+        .word-card .badge-level.easy { background: #28a745; }
+        .word-card .badge-level.medium { background: #ffc107; color: #212529; }
+        .word-card .badge-level.hard { background: #dc3545; }
+        .word-card .card-actions {
+            display: flex;
+            gap: 0.4rem;
+            margin-left: 0.8rem;
+        }
+        .word-card .card-actions button {
+            background: none;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+            cursor: pointer;
+        }
+        .word-card .card-actions button:hover { background: var(--border-color); }
+        .word-card .card-actions .btn-edit:hover { color: var(--brand-color); }
+        .word-card .card-actions .btn-delete:hover { color: #dc3545; }
+        .word-card .drag-handle {
+            color: var(--text-secondary);
+            opacity: 0.4;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            cursor: grab;
+        }
+        .sortable-ghost { opacity: 0.4; transform: scale(0.95); }
+        .sortable-chosen {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2) !important;
+            transform: scale(1.02);
+        }
+
+        /* ===== BOTTOM NAV ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0.5rem 0 0.7rem;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border-color);
+            z-index: 200;
+            transition: background var(--transition), border var(--transition);
+        }
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.65rem;
+            transition: color 0.2s;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            position: relative;
+        }
+        .bottom-nav a i { font-size: 1.4rem; transition: transform 0.2s; }
+        .bottom-nav a.active { color: var(--brand-color); }
+        .bottom-nav a.active i { transform: translateY(-2px); }
+        .bottom-nav a .badge-nav {
+            position: absolute;
+            top: -4px;
+            right: -2px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 20px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* ===== FAB ===== */
+        .fab {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--brand-gradient);
+            color: white;
+            border: none;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 25px rgba(108,99,255,0.4);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .fab:hover { transform: scale(1.05); box-shadow: 0 12px 35px rgba(108,99,255,0.5); }
+        .fab:active { transform: scale(0.92); }
+
+        /* ===== FOOTER NHẬN DIỆN ===== */
+        .footer-brand {
+            text-align: center;
+            padding: 0.8rem 0 0.3rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+        }
+        .footer-brand .signature {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .footer-brand .signature .heart {
+            color: #fe2c55;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .footer-brand .signature .brand-highlight {
+            color: var(--brand-color);
+            font-weight: 700;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .footer-brand .slogan {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            letter-spacing: 1px;
+            margin-top: 0.1rem;
+        }
+
+        /* ===== ANIMATION ===== */
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(20px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+        .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 1rem; }
+
+        @media (max-width: 480px) {
+            .app-header .brand-logo .logo-icon { width: 32px; height: 32px; font-size: 0.9rem; }
+            .app-header .brand-logo .brand-text .main { font-size: 1rem; }
+            .app-header .brand-logo .brand-text .sub { font-size: 0.55rem; }
+            .word-card { padding: 0.8rem 1rem; flex-wrap: wrap; }
+            .word-card .card-actions { margin-left: auto; }
+            .bottom-nav a { font-size: 0.55rem; padding: 0.1rem 0.5rem; }
+            .bottom-nav a i { font-size: 1.2rem; }
+            .search-bar { flex-wrap: wrap; }
+            .search-bar select { width: 100%; }
+            .footer-brand .signature { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+        <a href="/" class="brand-logo">
+            <div class="logo-icon">PH</div>
+            <div class="brand-text">
+                <span class="main">📚 Vocab</span>
+                <span class="sub">by <span>Phan Hải</span></span>
+            </div>
+        </a>
+        <div class="header-actions">
+            <a href="https://www.tiktok.com/@twuan.hai" target="_blank" class="tiktok-link">
+                <i class="bi bi-tiktok"></i>
+            </a>
+            <button class="theme-toggle-mobile" id="themeToggleMobile"><i class="bi bi-circle-half"></i></button>
+        </div>
+    </header>
+
+    <!-- ===== SEARCH ===== -->
+    <div class="search-bar">
+        <form method="GET" style="display: contents; width: 100%;">
+            <input type="text" name="search" placeholder="🔍 Tìm từ..." value="{{ search }}" />
+            <select name="level" onchange="this.form.submit()">
+                <option value="all">📊 Tất cả</option>
+                <option value="easy" {% if level=='easy' %}selected{% endif %}>🟢 Dễ</option>
+                <option value="medium" {% if level=='medium' %}selected{% endif %}>🟡 TB</option>
+                <option value="hard" {% if level=='hard' %}selected{% endif %}>🔴 Khó</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- ===== WORD LIST ===== -->
+    <div class="word-list" id="wordList">
+        {% if words %}
+            {% for word in words %}
+            <div class="word-card" data-id="{{ word[0] }}">
+                <div style="display: flex; align-items: center; flex: 1; min-width: 0;">
+                    <span class="drag-handle"><i class="bi bi-grip-vertical"></i></span>
+                    <div class="word-info">
+                        <span class="word">{{ word[1] }}</span>
+                        <span class="meaning">{{ word[2] }}</span>
+                        {% if word[3] %}
+                            <span class="example">"{{ word[3] }}"</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="badge-level {{ word[4] or 'medium' }}">{{ word[4] or 'medium' }}</span>
+                    <div class="card-actions">
+                        <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-id="{{ word[0] }}" data-word="{{ word[1] }}" data-meaning="{{ word[2] }}"
+                                data-example="{{ word[3] }}" data-level="{{ word[4] or 'medium' }}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteWord({{ word[0] }})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-emoji-frown"></i>
+                <h4>Chưa có từ nào</h4>
+                <p>Hãy thêm từ mới để bắt đầu học!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- ===== FAB ===== -->
+    <button class="fab" data-bs-toggle="modal" data-bs-target="#addModal">
+        <i class="bi bi-plus"></i>
+    </button>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav">
+        <a href="/" class="active"><i class="bi bi-house"></i><span>Trang chủ</span></a>
+        <a href="/study"><i class="bi bi-book"></i><span>Học</span>{% if total > 0 %}<span class="badge-nav">{{ total }}</span>{% endif %}</a>
+        <a href="/game"><i class="bi bi-controller"></i><span>Game</span></a>
+        <a href="/calculator"><i class="bi bi-calculator"></i><span>Máy tính</span></a>
+    </nav>
+
+    <!-- ===== FOOTER NHẬN DIỆN ===== -->
+    <div class="footer-brand">
+        <div class="signature">
+            <span>✧</span>
+            <span>Made with <span class="heart">❤</span> by</span>
+            <span class="brand-highlight">Phan Hải</span>
+            <span>✧</span>
+        </div>
+        <div class="slogan">TỪ ĐIỂN CÁ NHÂN · HỌC MỖI NGÀY</div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ url_for('add') }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Thêm từ mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Từ vựng *</label>
+                            <input type="text" name="word" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nghĩa *</label>
+                            <input type="text" name="meaning" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ví dụ</label>
+                            <textarea name="example" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cấp độ</label>
+                            <select name="level" class="form-select">
+                                <option value="easy">🟢 Dễ</option>
+                                <option value="medium" selected>🟡 Trung bình</option>
+                                <option value="hard">🔴 Khó</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-success">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" id="editForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-pencil"></i> Sửa từ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Từ vựng *</label>
+                            <input type="text" name="word" id="edit_word" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nghĩa *</label>
+                            <input type="text" name="meaning" id="edit_meaning" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ví dụ</label>
+                            <textarea name="example" id="edit_example" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cấp độ</label>
+                            <select name="level" id="edit_level" class="form-select">
+                                <option value="easy">🟢 Dễ</option>
+                                <option value="medium">🟡 Trung bình</option>
+                                <option value="hard">🔴 Khó</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode
+        (function() {
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggleMobile');
+            const saved = localStorage.getItem('theme') || 'light';
+            if (saved === 'dark') html.setAttribute('data-bs-theme', 'dark');
+            toggle.addEventListener('click', function() {
+                const next = html.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-bs-theme', next);
+                localStorage.setItem('theme', next);
+            });
+        })();
+
+        // Drag & Drop
+        const wordList = document.getElementById('wordList');
+        if (wordList) {
+            new Sortable(wordList, {
+                handle: '.drag-handle',
+                animation: 300,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                onEnd: function(evt) {
+                    const items = wordList.querySelectorAll('.word-card');
+                    const order = [];
+                    items.forEach(card => { order.push(card.dataset.id); });
+                    fetch('/reorder', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order: order })
+                    }).then(res => res.json()).then(data => {
+                        if (data.success) {
+                            items.forEach((card, i) => {
+                                card.style.animation = 'none';
+                                setTimeout(() => {
+                                    card.style.animation = 'cardAppear 0.3s ease';
+                                }, 10);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteWord(id) {
+            if (!confirm('Xóa từ này?')) return;
+            const card = document.querySelector(`.word-card[data-id="${id}"]`);
+            if (card) {
+                card.style.transition = 'transform 0.3s, opacity 0.3s';
+                card.style.transform = 'scale(0.8)';
+                card.style.opacity = '0';
+                setTimeout(() => { window.location.href = '/delete/' + id; }, 300);
+            } else {
+                window.location.href = '/delete/' + id;
+            }
+        }
+
+        document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#editModal"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('edit_word').value = this.dataset.word;
+                document.getElementById('edit_meaning').value = this.dataset.meaning;
+                document.getElementById('edit_example').value = this.dataset.example || '';
+                document.getElementById('edit_level').value = this.dataset.level || 'medium';
+                document.getElementById('editForm').action = '/update/' + this.dataset.id;
+            });
+        });
+    </script>
+</body>
+</html>
