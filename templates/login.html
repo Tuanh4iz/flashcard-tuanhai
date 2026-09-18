@@ -1,13 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Đăng nhập | Wibu FlashCard</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+        }
 
         body {
             font-family: 'Rajdhani', sans-serif;
@@ -17,22 +21,27 @@
                 radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.25), transparent 45%),
                 linear-gradient(135deg, #0a0a0f 0%, #2a0a3e 50%, #1a0a2f 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            padding: 20px 15px;
         }
 
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             inset: -50%;
             background-image: 
                 linear-gradient(rgba(255, 0, 128, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 0, 128, 0.08) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: gridMove 15s linear infinite;
+            pointer-events: none;
+            z-index: 0;
         }
 
         @keyframes gridMove {
@@ -41,13 +50,14 @@
         }
 
         .heart {
-            position: absolute;
+            position: fixed;
             color: #ff0080;
             font-size: 24px;
             pointer-events: none;
             animation: floatUp linear infinite;
             text-shadow: 0 0 15px #ff0080, 0 0 30px #ff0080;
             user-select: none;
+            z-index: 1;
         }
 
         @keyframes floatUp {
@@ -57,9 +67,8 @@
             100% { transform: translateY(-100px) scale(1.2) rotate(360deg); opacity: 0; }
         }
 
-        /* Chữ Việt chạy ngang */
         .jp-scroll {
-            position: absolute;
+            position: fixed;
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             font-size: 70px;
@@ -68,6 +77,7 @@
             pointer-events: none;
             user-select: none;
             letter-spacing: 5px;
+            z-index: 1;
         }
 
         .jp-scroll-1 { top: 10%; animation: scrollLeft 20s linear infinite; }
@@ -89,12 +99,13 @@
             z-index: 10;
             width: 100%;
             max-width: 440px;
-            padding: 20px;
+            margin: auto;
         }
 
         .card {
             background: rgba(10, 10, 20, 0.9);
             backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 2px solid rgba(255, 0, 128, 0.5);
             border-radius: 24px;
             padding: 50px 40px 40px;
@@ -111,54 +122,21 @@
             from { box-shadow: 0 0 40px rgba(255, 0, 128, 0.4), 0 0 80px rgba(168, 85, 247, 0.3); }
             to { box-shadow: 0 0 60px rgba(255, 0, 128, 0.7), 0 0 120px rgba(168, 85, 247, 0.5); }
         }
-/* Thêm vào cuối phần <style> */
-@media (max-width: 480px) {
-    .card {
-        padding: 40px 25px 30px;
-        border-radius: 18px;
-    }
-    .title {
-        font-size: 26px;
-    }
-    .subtitle {
-        font-size: 12px;
-        letter-spacing: 3px;
-    }
-    .input-group input {
-        padding: 13px 15px 13px 42px;
-        font-size: 15px;
-    }
-    .input-group .icon {
-        left: 14px;
-        font-size: 17px;
-    }
-    .btn {
-        padding: 14px;
-        font-size: 15px;
-        letter-spacing: 2px;
-    }
-    .jp-scroll {
-        font-size: 45px;
-    }
-    .yamete, .senpai {
-        font-size: 16px;
-        letter-spacing: 4px;
-    }
-}
-        /* Chữ ĐỪNG MÀ nhấp nháy */
+
         .yamete {
             position: absolute;
-            top: 10px;
+            top: 12px;
             left: 50%;
             transform: translateX(-50%);
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            font-size: 20px;
+            font-size: 18px;
             color: #ff0080;
             text-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080, 0 0 40px #ff0080;
             animation: yameteBlink 0.8s infinite;
-            letter-spacing: 6px;
+            letter-spacing: 5px;
             z-index: 5;
+            white-space: nowrap;
         }
 
         @keyframes yameteBlink {
@@ -168,11 +146,12 @@
 
         .heartbeat {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 30px;
+            top: 12px;
+            right: 12px;
+            font-size: 26px;
             animation: heartbeat 1s infinite;
             filter: drop-shadow(0 0 10px #ff0080);
+            z-index: 5;
         }
 
         @keyframes heartbeat {
@@ -194,6 +173,7 @@
             background-clip: text;
             text-transform: uppercase;
             letter-spacing: 4px;
+            margin-top: 15px;
             margin-bottom: 5px;
             animation: gradientShift 3s linear infinite;
             filter: drop-shadow(0 0 15px rgba(255, 0, 128, 0.6));
@@ -209,7 +189,7 @@
             font-family: 'Rajdhani', sans-serif;
             font-size: 14px;
             letter-spacing: 4px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             font-weight: 700;
             animation: subtitleGlow 2s ease-in-out infinite alternate;
         }
@@ -221,7 +201,7 @@
 
         .input-group {
             position: relative;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .input-group input {
@@ -243,7 +223,6 @@
             border-color: #ff0080;
             box-shadow: 0 0 25px rgba(255, 0, 128, 0.7), inset 0 0 15px rgba(255, 0, 128, 0.15);
             background: rgba(255, 0, 128, 0.1);
-            transform: scale(1.02);
         }
 
         .input-group input::placeholder {
@@ -284,6 +263,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 0 25px rgba(255, 0, 128, 0.6);
             animation: btnGradient 3s linear infinite;
+            margin-top: 5px;
         }
 
         @keyframes btnGradient {
@@ -293,13 +273,6 @@
         .btn:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 0 40px rgba(255, 0, 128, 1), 0 0 80px rgba(168, 85, 247, 0.7);
-            animation: btnShake 0.3s infinite;
-        }
-
-        @keyframes btnShake {
-            0%, 100% { transform: translateY(-3px) scale(1.02) rotate(0deg); }
-            25% { transform: translateY(-3px) scale(1.02) rotate(-1deg); }
-            75% { transform: translateY(-3px) scale(1.02) rotate(1deg); }
         }
 
         .btn::before {
@@ -369,6 +342,107 @@
             bottom: 10px; right: 10px;
             border-left: none; border-top: none;
             border-radius: 0 0 12px 0;
+        }
+
+        /* ===== RESPONSIVE MOBILE ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                align-items: center;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 48px 25px 30px;
+                border-radius: 20px;
+            }
+
+            .title {
+                font-size: 28px;
+                letter-spacing: 3px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                letter-spacing: 3px;
+                margin-bottom: 25px;
+            }
+
+            .jp-scroll {
+                font-size: 50px;
+            }
+
+            .yamete {
+                font-size: 15px;
+                letter-spacing: 3px;
+            }
+
+            .heartbeat {
+                font-size: 22px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 45px 20px 25px;
+                border-radius: 16px;
+            }
+
+            .title {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                font-size: 11px;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            .input-group {
+                margin-bottom: 15px;
+            }
+
+            .input-group input {
+                padding: 13px 15px 13px 42px;
+                font-size: 15px;
+            }
+
+            .input-group .icon {
+                left: 14px;
+                font-size: 17px;
+            }
+
+            .btn {
+                padding: 14px;
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .link {
+                font-size: 12px;
+                margin-top: 20px;
+            }
+
+            .jp-scroll {
+                font-size: 40px;
+            }
+
+            .yamete {
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+
+            .heartbeat {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
