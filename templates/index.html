@@ -41,7 +41,61 @@
             padding-bottom: 80px;
             min-height: 100vh;
         }
-        /* ===== HEADER CÓ NHẬN DIỆN THƯƠNG HIỆU ===== */
+
+        /* ===== USER BAR NHỎ GỌN ===== */
+        .user-bar {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 0, 128, 0.4);
+            border-radius: 50px;
+            padding: 4px 5px 4px 12px;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .user-bar:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 128, 0.7);
+            border-color: rgba(255, 0, 128, 0.8);
+        }
+
+        .user-bar .name {
+            color: #ff66b3;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px rgba(255, 0, 128, 0.6);
+            white-space: nowrap;
+        }
+
+        .user-bar .logout {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #ff0080, #a855f7);
+            border-radius: 50px;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        .user-bar .logout:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 128, 1), 0 0 30px rgba(168, 85, 247, 0.7);
+        }
+
+        /* ===== HEADER ===== */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -251,6 +305,7 @@
             padding: 0.5rem 0 0.7rem;
             background: var(--nav-bg);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--border-color);
             z-index: 200;
             transition: background var(--transition), border var(--transition);
@@ -307,7 +362,7 @@
         .fab:hover { transform: scale(1.05); box-shadow: 0 12px 35px rgba(108,99,255,0.5); }
         .fab:active { transform: scale(0.92); }
 
-        /* ===== FOOTER NHẬN DIỆN ===== */
+        /* ===== FOOTER ===== */
         .footer-brand {
             text-align: center;
             padding: 0.8rem 0 0.3rem;
@@ -349,7 +404,6 @@
             margin-top: 0.1rem;
         }
 
-        /* ===== ANIMATION ===== */
         @keyframes cardAppear {
             0% { opacity: 0; transform: translateY(20px) scale(0.96); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -361,6 +415,7 @@
         }
         .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 1rem; }
 
+        /* ===== RESPONSIVE MOBILE ===== */
         @media (max-width: 480px) {
             .app-header .brand-logo .logo-icon { width: 32px; height: 32px; font-size: 0.9rem; }
             .app-header .brand-logo .brand-text .main { font-size: 1rem; }
@@ -372,73 +427,26 @@
             .search-bar { flex-wrap: wrap; }
             .search-bar select { width: 100%; }
             .footer-brand .signature { font-size: 0.75rem; }
+
+            .user-bar {
+                top: 8px;
+                right: 8px;
+                padding: 3px 4px 3px 10px;
+                gap: 6px;
+            }
+            .user-bar .name { font-size: 10px; }
+            .user-bar .logout { font-size: 9px; padding: 3px 8px; letter-spacing: 0.5px; }
         }
     </style>
 </head>
 <body>
-<style>
-    .user-bar {
-        position: fixed;
-        top: 15px;
-        right: 15px;
-        z-index: 9999;
-        background: rgba(10, 10, 20, 0.9);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 0, 128, 0.5);
-        border-radius: 12px;
-        padding: 10px 18px;
-        box-shadow: 0 0 25px rgba(255, 0, 128, 0.5);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-family: 'Rajdhani', sans-serif;
-        animation: userBarPulse 2s ease-in-out infinite alternate;
-    }
 
-    @keyframes userBarPulse {
-        from { box-shadow: 0 0 25px rgba(255, 0, 128, 0.5); }
-        to { box-shadow: 0 0 35px rgba(255, 0, 128, 0.9), 0 0 60px rgba(168, 85, 247, 0.5); }
-    }
+    <!-- ===== USER BAR NHỎ GỌN ===== -->
+    <div class="user-bar">
+        <span class="name">👤 {{ current_user.username }}</span>
+        <a href="{{ url_for('logout') }}" class="logout">ĐĂNG XUẤT</a>
+    </div>
 
-    .user-bar .name {
-        color: #ff0080;
-        font-weight: 700;
-        font-size: 15px;
-        letter-spacing: 1px;
-        text-shadow: 0 0 10px #ff0080;
-    }
-
-    .user-bar .logout {
-        color: #ff0080;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 13px;
-        padding: 6px 14px;
-        border: 1px solid #ff0080;
-        border-radius: 8px;
-        transition: all 0.3s;
-        letter-spacing: 1px;
-    }
-
-    .user-bar .logout:hover {
-        background: #ff0080;
-        color: #fff;
-        box-shadow: 0 0 20px #ff0080, 0 0 40px #a855f7;
-        transform: scale(1.05);
-        animation: shake 0.4s infinite;
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: scale(1.05) rotate(0deg); }
-        25% { transform: scale(1.05) rotate(-2deg); }
-        75% { transform: scale(1.05) rotate(2deg); }
-    }
-</style>
-
-<div class="user-bar">
-    <span class="name">👤 {{ current_user.username }}</span>
-    <a href="{{ url_for('logout') }}" class="logout">ĐĂNG XUẤT</a>
-</div>
     <!-- ===== HEADER ===== -->
     <header class="app-header">
         <a href="/" class="brand-logo">
@@ -473,26 +481,26 @@
     <div class="word-list" id="wordList">
         {% if words %}
             {% for word in words %}
-            <div class="word-card" data-id="{{ word[0] }}">
+            <div class="word-card" data-id="{{ word.id }}">
                 <div style="display: flex; align-items: center; flex: 1; min-width: 0;">
                     <span class="drag-handle"><i class="bi bi-grip-vertical"></i></span>
                     <div class="word-info">
-                        <span class="word">{{ word[1] }}</span>
-                        <span class="meaning">{{ word[2] }}</span>
-                        {% if word[3] %}
-                            <span class="example">"{{ word[3] }}"</span>
+                        <span class="word">{{ word.word }}</span>
+                        <span class="meaning">{{ word.meaning }}</span>
+                        {% if word.example %}
+                            <span class="example">"{{ word.example }}"</span>
                         {% endif %}
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="badge-level {{ word[4] or 'medium' }}">{{ word[4] or 'medium' }}</span>
+                    <span class="badge-level {{ word.level or 'medium' }}">{{ word.level or 'medium' }}</span>
                     <div class="card-actions">
                         <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editModal"
-                                data-id="{{ word[0] }}" data-word="{{ word[1] }}" data-meaning="{{ word[2] }}"
-                                data-example="{{ word[3] }}" data-level="{{ word[4] or 'medium' }}">
+                                data-id="{{ word.id }}" data-word="{{ word.word }}" data-meaning="{{ word.meaning }}"
+                                data-example="{{ word.example or '' }}" data-level="{{ word.level or 'medium' }}">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn-delete" onclick="deleteWord({{ word[0] }})">
+                        <button class="btn-delete" onclick="deleteWord({{ word.id }})">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -521,7 +529,7 @@
         <a href="/calculator"><i class="bi bi-calculator"></i><span>Máy tính</span></a>
     </nav>
 
-    <!-- ===== FOOTER NHẬN DIỆN ===== -->
+    <!-- ===== FOOTER ===== -->
     <div class="footer-brand">
         <div class="signature">
             <span>✧</span>
@@ -532,8 +540,7 @@
         <div class="slogan">TỪ ĐIỂN CÁ NHÂN · HỌC MỖI NGÀY</div>
     </div>
 
-    <!-- ===== MODALS ===== -->
-    <!-- Add Modal -->
+    <!-- ===== ADD MODAL ===== -->
     <div class="modal fade" id="addModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -573,7 +580,7 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- ===== EDIT MODAL ===== -->
     <div class="modal fade" id="editModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -615,7 +622,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dark mode
+        // ===== DARK MODE =====
         (function() {
             const html = document.documentElement;
             const toggle = document.getElementById('themeToggleMobile');
@@ -628,7 +635,7 @@
             });
         })();
 
-        // Drag & Drop
+        // ===== DRAG & DROP =====
         const wordList = document.getElementById('wordList');
         if (wordList) {
             new Sortable(wordList, {
@@ -659,6 +666,7 @@
             });
         }
 
+        // ===== DELETE WORD =====
         function deleteWord(id) {
             if (!confirm('Xóa từ này?')) return;
             const card = document.querySelector(`.word-card[data-id="${id}"]`);
@@ -672,6 +680,7 @@
             }
         }
 
+        // ===== EDIT MODAL =====
         document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target="#editModal"]').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.getElementById('edit_word').value = this.dataset.word;

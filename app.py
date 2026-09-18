@@ -13,7 +13,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# ===== BẢNG DATABASE =====
+# ===== DATABASE MODELS =====
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -159,6 +159,13 @@ def update(id):
         db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/reorder', methods=['POST'])
+@login_required
+def reorder():
+    data = request.get_json()
+    order = data.get('order', [])
+    return jsonify({"success": True})
+
 # ============================================================
 # HỌC TỪ
 # ============================================================
@@ -197,15 +204,28 @@ def reset_study():
     return redirect(url_for('study'))
 
 # ============================================================
-# GAME / MÁY TÍNH
+# GAME GHÉP CẶP (ĐÃ SỬA)
 # ============================================================
 @app.route('/game')
 @login_required
 def game():
     words = Flashcard.query.filter_by(user_id=current_user.id)\
         .order_by(db.func.random()).limit(10).all()
-    return render_template('game.html', words=words)
+    
+    # Chuyển object thành dict để JSON serializable
+    words_data = [{
+        'id': w.id,
+        'word': w.word,
+        'meaning': w.meaning,
+        'example': w.example,
+        'level': w.level
+    } for w in words]
+    
+    return render_template('game.html', words=words_data)
 
+# ============================================================
+# MÁY TÍNH
+# ============================================================
 @app.route('/calculator')
 @login_required
 def calculator():
@@ -214,9 +234,8 @@ def calculator():
 # ============================================================
 # CHẠY APP
 # ============================================================
-# Tạo database khi chạy bằng Gunicorn (quan trọng!)
 with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)

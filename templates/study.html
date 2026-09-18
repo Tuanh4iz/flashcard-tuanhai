@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="vi" data-bs-theme="light">
 <head>
@@ -46,7 +44,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         .study-header h1 {
             font-size: 1.4rem;
@@ -62,10 +60,11 @@
             color: var(--text-secondary);
             cursor: pointer;
         }
-        /* Swipe Card */
+
+        /* ===== SWIPE CARD ===== */
         .swipe-container {
             position: relative;
-            height: 340px;
+            height: 320px;
             perspective: 800px;
         }
         .swipe-card {
@@ -75,7 +74,7 @@
             background: var(--bg-card);
             border-radius: 28px;
             box-shadow: var(--shadow);
-            padding: 2rem 1.5rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -90,21 +89,21 @@
         }
         .swipe-card:active { cursor: grabbing; }
         .swipe-card .word-display {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
         .swipe-card .example-display {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-secondary);
             font-style: italic;
             margin-bottom: 0.5rem;
         }
         .swipe-card .level-badge {
-            padding: 0.3rem 1rem;
+            padding: 0.25rem 0.9rem;
             border-radius: 30px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             background: #6c63ff;
             color: white;
@@ -114,7 +113,7 @@
         .swipe-card .level-badge.medium { background: #ffc107; color: #212529; }
         .swipe-card .level-badge.hard { background: #dc3545; }
         .swipe-card .meaning-hidden {
-            margin-top: 1rem;
+            margin-top: 0.8rem;
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.4s, transform 0.4s;
@@ -124,54 +123,45 @@
             transform: translateY(0);
         }
         .swipe-card .meaning-hidden .meaning-text {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
             color: #28a745;
         }
-        .swipe-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
+        .swipe-card .btn-show-meaning {
             margin-top: 1rem;
+            background: #28a745;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
-        .swipe-indicator .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--border-color);
-            transition: background 0.3s, transform 0.3s;
-        }
-        .swipe-indicator .dot.active {
-            background: #6c63ff;
-            transform: scale(1.3);
-        }
-        /* Swipe hint */
         .swipe-hint {
             text-align: center;
             color: var(--text-secondary);
-            font-size: 0.8rem;
-            margin: 1rem 0;
+            font-size: 0.75rem;
+            margin: 0.8rem 0;
             opacity: 0.6;
         }
-        .swipe-hint i { font-size: 1.2rem; }
+        .swipe-hint i { font-size: 1rem; }
 
-        /* Progress */
+        /* ===== PROGRESS ===== */
         .progress-wrapper {
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 0.8rem 1rem;
+            border-radius: 14px;
+            padding: 0.6rem 0.9rem;
             border: 1px solid var(--border-color);
         }
         .progress-wrapper .progress-label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
             margin-bottom: 0.3rem;
         }
         .progress-wrapper .progress-bar-custom {
-            height: 8px;
+            height: 7px;
             background: var(--border-color);
             border-radius: 10px;
             overflow: hidden;
@@ -183,7 +173,54 @@
             transition: width 0.5s ease;
         }
 
-        /* Bottom Nav */
+        /* ===== NÚT GỌN ===== */
+        .action-buttons {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            align-items: center;
+            margin: 0.8rem 0 1.2rem;
+        }
+        .btn-next {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.6rem 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            box-shadow: 0 4px 15px rgba(108,99,255,0.4);
+        }
+        .btn-next:hover {
+            background: #5a52e0;
+            transform: translateY(-2px);
+            color: white;
+        }
+        .btn-reset {
+            background: transparent;
+            color: #dc3545;
+            border: 2px solid #dc3545;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-reset:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* ===== BOTTOM NAV ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -195,9 +232,9 @@
             padding: 0.6rem 0 0.8rem;
             background: var(--nav-bg);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--border-color);
             z-index: 200;
-            transition: background 0.3s, border 0.3s;
         }
         .bottom-nav a {
             display: flex;
@@ -212,16 +249,7 @@
         }
         .bottom-nav a i { font-size: 1.5rem; }
         .bottom-nav a.active { color: #6c63ff; }
-        .bottom-nav a .badge-nav {
-            background: #dc3545;
-            color: white;
-            font-size: 0.6rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 20px;
-            min-width: 18px;
-            text-align: center;
-        }
-        /* Empty state */
+
         .empty-state {
             text-align: center;
             padding: 3rem 1rem;
@@ -229,9 +257,26 @@
         }
         .empty-state i { font-size: 4rem; opacity: 0.3; margin-bottom: 1rem; }
 
+        /* ===== RESPONSIVE MOBILE ===== */
         @media (max-width: 480px) {
-            .swipe-card .word-display { font-size: 2rem; }
-            .swipe-card .meaning-hidden .meaning-text { font-size: 1.2rem; }
+            .study-container { padding: 0.8rem 0.8rem 0; }
+            .study-header { margin-bottom: 0.8rem; }
+            .study-header h1 { font-size: 1.2rem; }
+            .swipe-container { height: 240px; }
+            .swipe-card { padding: 1.2rem 1rem; border-radius: 22px; }
+            .swipe-card .word-display { font-size: 1.7rem; }
+            .swipe-card .example-display { font-size: 0.8rem; }
+            .swipe-card .level-badge { font-size: 0.65rem; padding: 0.2rem 0.7rem; }
+            .swipe-card .meaning-hidden .meaning-text { font-size: 1.1rem; }
+            .swipe-card .btn-show-meaning { padding: 0.4rem 1.2rem; font-size: 0.8rem; }
+            .swipe-hint { font-size: 0.65rem; margin: 0.5rem 0; }
+            .progress-wrapper { padding: 0.5rem 0.8rem; margin: 0.8rem 0; }
+            .progress-wrapper .progress-label { font-size: 0.75rem; }
+            .btn-next { padding: 0.5rem 1.5rem; font-size: 0.8rem; }
+            .btn-reset { width: 38px; height: 38px; font-size: 1rem; }
+            .action-buttons { margin: 0.6rem 0 1rem; }
+            .bottom-nav a { font-size: 0.55rem; padding: 0.1rem 0.5rem; }
+            .bottom-nav a i { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -254,25 +299,18 @@
 
         <div class="swipe-container" id="swipeContainer">
             <div class="swipe-card" id="swipeCard">
-                <div class="word-display">{{ word[1] }}</div>
-                {% if word[3] %}
-                    <div class="example-display">"{{ word[3] }}"</div>
+                <div class="word-display">{{ word.word }}</div>
+                {% if word.example %}
+                    <div class="example-display">"{{ word.example }}"</div>
                 {% endif %}
-                <span class="level-badge {{ word[4] or 'medium' }}">{{ word[4] or 'medium' }}</span>
+                <span class="level-badge {{ word.level or 'medium' }}">{{ word.level or 'medium' }}</span>
                 <div class="meaning-hidden" id="meaningHidden">
-                    <div class="meaning-text">{{ word[2] }}</div>
-                    <button class="btn btn-sm btn-outline-secondary mt-2" onclick="toggleMeaning()">Ẩn nghĩa</button>
+                    <div class="meaning-text">{{ word.meaning }}</div>
                 </div>
-                <button class="btn btn-success btn-sm mt-3" onclick="toggleMeaning()">
+                <button class="btn btn-success btn-sm btn-show-meaning" onclick="toggleMeaning()">
                     <i class="bi bi-eye"></i> Xem nghĩa
                 </button>
             </div>
-        </div>
-
-        <div class="swipe-indicator" id="dotIndicator">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
         </div>
 
         <div class="progress-wrapper">
@@ -285,13 +323,12 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
-            <a href="/study" class="btn btn-primary" style="border-radius: 30px; padding: 0.6rem 1.8rem;">
-                <i class="bi bi-arrow-right"></i> Từ tiếp theo
+        <div class="action-buttons">
+            <a href="/study" class="btn-next">
+                <i class="bi bi-arrow-right"></i> Tiếp
             </a>
-            <a href="/reset-study" class="btn btn-outline-danger" style="border-radius: 30px; padding: 0.6rem 1.2rem;"
-               onclick="return confirm('Reset tiến độ học?')">
-                <i class="bi bi-arrow-counterclockwise"></i> Học lại
+            <a href="/reset-study" class="btn-reset" onclick="return confirm('Reset tiến độ học?')">
+                <i class="bi bi-arrow-counterclockwise"></i>
             </a>
         </div>
 
@@ -305,15 +342,14 @@
     {% endif %}
 </div>
 
-<!-- Bottom Nav -->
 <nav class="bottom-nav">
     <a href="/"><i class="bi bi-house"></i><span>Trang chủ</span></a>
     <a href="/study" class="active"><i class="bi bi-book"></i><span>Học</span></a>
+    <a href="/game"><i class="bi bi-controller"></i><span>Game</span></a>
     <a href="/calculator"><i class="bi bi-calculator"></i><span>Máy tính</span></a>
 </nav>
 
 <script>
-    // ===== DARK MODE =====
     (function() {
         const html = document.documentElement;
         const toggle = document.getElementById('themeToggleStudy');
@@ -326,20 +362,17 @@
         });
     })();
 
-    // ===== TOGGLE MEANING =====
     function toggleMeaning() {
         const hidden = document.getElementById('meaningHidden');
         hidden.classList.toggle('show');
     }
 
-    // ===== SWIPE GESTURE =====
     (function() {
         if (document.getElementById('swipeCard')) {
             let startX = 0;
             let currentX = 0;
             let isDragging = false;
             const card = document.getElementById('swipeCard');
-            const container = document.getElementById('swipeContainer');
 
             function onStart(clientX) {
                 startX = clientX;
@@ -362,7 +395,6 @@
                 card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease';
 
                 if (Math.abs(currentX) > 150) {
-                    // Swipe thành công → chuyển sang từ tiếp theo
                     card.style.transform = `translateX(${currentX > 0 ? 400 : -400}px) rotate(${currentX / 15}deg)`;
                     card.style.opacity = '0';
                     setTimeout(() => {
@@ -375,7 +407,6 @@
                 currentX = 0;
             }
 
-            // Touch events
             card.addEventListener('touchstart', (e) => {
                 onStart(e.touches[0].clientX);
             }, { passive: true });
@@ -384,7 +415,6 @@
             }, { passive: true });
             card.addEventListener('touchend', onEnd, { passive: true });
 
-            // Mouse events (for desktop)
             card.addEventListener('mousedown', (e) => {
                 onStart(e.clientX);
                 e.preventDefault();
