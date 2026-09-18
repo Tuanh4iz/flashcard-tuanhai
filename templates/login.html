@@ -3,6 +3,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập | Wibu FlashCard</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -110,7 +111,40 @@
             from { box-shadow: 0 0 40px rgba(255, 0, 128, 0.4), 0 0 80px rgba(168, 85, 247, 0.3); }
             to { box-shadow: 0 0 60px rgba(255, 0, 128, 0.7), 0 0 120px rgba(168, 85, 247, 0.5); }
         }
-
+/* Thêm vào cuối phần <style> */
+@media (max-width: 480px) {
+    .card {
+        padding: 40px 25px 30px;
+        border-radius: 18px;
+    }
+    .title {
+        font-size: 26px;
+    }
+    .subtitle {
+        font-size: 12px;
+        letter-spacing: 3px;
+    }
+    .input-group input {
+        padding: 13px 15px 13px 42px;
+        font-size: 15px;
+    }
+    .input-group .icon {
+        left: 14px;
+        font-size: 17px;
+    }
+    .btn {
+        padding: 14px;
+        font-size: 15px;
+        letter-spacing: 2px;
+    }
+    .jp-scroll {
+        font-size: 45px;
+    }
+    .yamete, .senpai {
+        font-size: 16px;
+        letter-spacing: 4px;
+    }
+}
         /* Chữ ĐỪNG MÀ nhấp nháy */
         .yamete {
             position: absolute;
